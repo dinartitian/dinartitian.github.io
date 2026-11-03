@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dinar Titian Jannah — Informatics Engineer</title>
+<title>Dinar Titian Jannah — Frontend Developer &amp; Marketing Analyst</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -68,6 +68,7 @@
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+    .g-track{ scroll-behavior:auto !important; }
   }
 
   body{
@@ -309,7 +310,7 @@
 
   .pr-card{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:26px; display:flex; flex-direction:column; gap:16px;
+    padding:26px; display:flex; flex-direction:column; gap:16px; min-width:0;
     opacity:0; transform:translateY(18px); transition:opacity .5s ease, transform .5s ease, border-color .2s ease;
   }
   .pr-card.in{ opacity:1; transform:none; }
@@ -325,6 +326,94 @@
 
   .pr-card h3{ font-size:1.18rem; line-height:1.3; }
   .pr-desc{ color:var(--text-soft); font-size:0.92rem; }
+
+
+  /* ---------- GALLERY (slider) ---------- */
+  .gallery{
+    border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    background:var(--surface-2);
+  }
+  .g-viewport{ position:relative; }
+  .g-track{
+    display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
+    scroll-behavior:smooth; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .g-track::-webkit-scrollbar{ display:none; }
+  .g-slide{
+    position:relative; flex:0 0 100%; scroll-snap-align:center;
+    aspect-ratio:16/10; margin:0; cursor:zoom-in;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--ink);
+  }
+  .g-slide img{ width:100%; height:100%; object-fit:contain; }
+  .g-cap{
+    position:absolute; left:0; right:0; bottom:0;
+    padding:26px 14px 10px;
+    background:linear-gradient(to top, rgba(0,0,0,0.72), transparent);
+    color:#fff; font-family:'JetBrains Mono', monospace; font-size:0.72rem;
+    pointer-events:none;
+  }
+  .g-placeholder{
+    display:none; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    position:absolute; inset:0; padding:16px; text-align:center;
+    color:var(--text-faint); font-family:'JetBrains Mono', monospace; font-size:0.72rem;
+    border:1.5px dashed var(--line-strong); margin:12px; border-radius:10px;
+  }
+  .g-placeholder svg{ width:26px; height:26px; }
+  .g-slide.missing{ cursor:default; }
+  .g-slide.missing img{ display:none; }
+  .g-slide.missing .g-placeholder{ display:flex; }
+  .g-slide.missing .g-cap{ display:none; }
+
+  .g-btn{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--header-bg); backdrop-filter:blur(6px);
+    border:1px solid var(--line-strong); color:var(--text);
+    cursor:pointer; font-size:1.1rem; line-height:1; z-index:2;
+    transition:border-color .15s, color .15s, opacity .15s;
+  }
+  .g-btn:hover{ border-color:var(--teal); color:var(--teal); }
+  .g-btn.prev{ left:10px; }
+  .g-btn.next{ right:10px; }
+  .g-btn[disabled]{ opacity:0.3; cursor:default; pointer-events:none; }
+
+  .g-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px; border-top:1px solid var(--line);
+    font-family:'JetBrains Mono', monospace; font-size:0.7rem; color:var(--text-faint);
+  }
+  .g-dots{ display:flex; gap:6px; }
+  .g-dot{
+    width:7px; height:7px; border-radius:50%; padding:0; border:none; cursor:pointer;
+    background:var(--line-strong); transition:background .2s, transform .2s;
+  }
+  .g-dot.active{ background:var(--teal); transform:scale(1.25); }
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(5,7,10,0.92);
+    display:none; align-items:center; justify-content:center; padding:24px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox figure{ margin:0; max-width:min(1100px, 100%); text-align:center; }
+  .lightbox img{ max-height:78vh; width:auto; max-width:100%; margin:0 auto; border-radius:8px; }
+  .lightbox figcaption{ margin-top:14px; color:#d6dae1; font-family:'JetBrains Mono', monospace; font-size:0.8rem; }
+  .lb-close, .lb-nav{
+    position:absolute; width:42px; height:42px; border-radius:50%;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2);
+    color:#fff; font-size:1.2rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s;
+  }
+  .lb-close:hover, .lb-nav:hover{ background:rgba(255,255,255,0.18); }
+  .lb-close{ top:18px; right:18px; }
+  .lb-nav{ top:50%; transform:translateY(-50%); }
+  .lb-nav.prev{ left:18px; }
+  .lb-nav.next{ right:18px; }
+  .lb-nav[hidden]{ display:none; }
 
   .stack-chips{ display:flex; flex-wrap:wrap; gap:7px; }
   .chip{
@@ -351,6 +440,16 @@
     border-radius:var(--radius); padding:26px 28px;
   }
   .exp-card + .exp-card{ margin-top:18px; }
+  .exp-top{ display:flex; gap:16px; align-items:flex-start; margin-bottom:14px; }
+  .exp-top-body{ flex:1; min-width:0; }
+  .exp-top-body .exp-head{ margin-bottom:6px; }
+  .exp-top-body .exp-company{ margin-bottom:0; }
+  .exp-logo{
+    flex-shrink:0; width:52px; height:52px; padding:7px;
+    display:flex; align-items:center; justify-content:center;
+    background:#fff; border:1px solid var(--line-strong); border-radius:12px; overflow:hidden;
+  }
+  .exp-logo img{ max-width:100%; max-height:100%; object-fit:contain; }
   .exp-head{ display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
   .exp-head .role{ font-size:1.12rem; font-weight:700; font-family:'Space Grotesk', sans-serif; }
   .exp-head .date{ font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:var(--text-faint); }
@@ -378,39 +477,6 @@
   .cert-issuer{ font-size:0.8rem; color:var(--text-soft); margin-top:3px; }
   .cert-date{ font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--text-faint); margin-top:7px; display:block; }
   .cert-link{ display:inline-flex; align-items:center; gap:4px; margin-top:8px; font-size:0.8rem; font-weight:600; color:var(--teal); }
-
-  /* ---------- ABOUT ---------- */
-  .about-grid{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:32px; align-items:start; }
-  @media (max-width:820px){ .about-grid{ grid-template-columns:1fr; } }
-  .about-text p{ color:var(--text-soft); font-size:0.98rem; margin:0 0 16px; }
-  .about-text p:last-child{ margin-bottom:0; }
-  .about-text strong{ color:var(--text); font-weight:600; }
-  .about-highlight{
-    background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--amber);
-    border-radius:var(--radius-sm); padding:16px 20px; margin:20px 0;
-    font-style:italic; color:var(--text); font-size:0.95rem;
-  }
-  .trait-panel{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:26px;
-  }
-  .trait-panel h3{ font-size:0.95rem; margin-bottom:16px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.04em; font-family:'JetBrains Mono', monospace; font-weight:500; }
-  .trait-list{ display:flex; flex-direction:column; gap:14px; }
-  .trait-item{ display:flex; gap:12px; align-items:flex-start; }
-  .trait-item .trait-ic{
-    flex-shrink:0; width:32px; height:32px; border-radius:8px;
-    background:var(--teal-soft); border:1px solid var(--teal-border); color:var(--teal);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .trait-item .trait-ic svg{ width:16px; height:16px; }
-  .trait-item .trait-txt .t-title{ font-weight:600; font-size:0.88rem; }
-  .trait-item .trait-txt .t-desc{ font-size:0.8rem; color:var(--text-faint); margin-top:2px; }
-  .goal-strip{
-    margin-top:20px; padding-top:18px; border-top:1px dashed var(--line);
-  }
-  .goal-strip .g-label{ font-family:'JetBrains Mono', monospace; font-size:0.7rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; display:block; }
-  .goal-chips{ display:flex; flex-wrap:wrap; gap:6px; }
-  .goal-chips .chip{ font-size:0.68rem; }
 
   /* ---------- SKILLS ---------- */
   .skills-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
@@ -473,10 +539,10 @@
   <nav class="wrap">
     <div class="logo"><span class="dot-live"></span><span>Dinar Titian Jannah</span></div>
     <div class="navlinks" id="navlinks">
+      <a href="#education">Pendidikan</a>
       <a href="#projects">Proyek</a>
       <a href="#experience">Pengalaman</a>
       <a href="#skills">Keahlian</a>
-      <a href="#education">Pendidikan</a>
       <a href="#certificates">Sertifikat</a>
       <a href="#contact">Kontak</a>
     </div>
@@ -516,16 +582,16 @@
       </h1>
 
       <div class="role-row node-row hero-fade" id="fadeRoles">
-        <span class="pill">AI Integration</span>
+        <span class="pill">Frontend Development</span>
         <span class="connector"></span>
-        <span class="pill">Backend Development</span>
+        <span class="pill">Data Analysis</span>
         <span class="connector"></span>
         <span class="pill">Workflow Automation</span>
         <span class="connector"></span>
-        <span class="pill">Administrasi &amp; Data</span>
+        <span class="pill">Administrasi</span>
       </div>
 
-      <p class="lead hero-fade" id="fadeLead">Lulusan S1 Teknik Informatika Universitas Dian Nuswantoro (IPK 3.37/4.00), peminatan Rekayasa Perangkat Lunak. Berpengalaman di backend PHP/MySQL dan integrasi AI dengan n8n & OpenAI API, serta terbiasa bekerja rapi dengan database, automasi alur kerja, dan pengolahan data.</p>
+      <p class="lead hero-fade" id="fadeLead">Lulusan S1 Teknik Informatika Universitas Dian Nuswantoro (IPK 3.37/4.00), peminatan Rekayasa Perangkat Lunak. Berpengalaman mengerjakan antarmuka web responsif dengan HTML, CSS, JavaScript, dan Bootstrap/Tailwind, memiliki sertifikasi BNSP Associate Data Scientist untuk pengolahan dan evaluasi data, serta terbiasa berkomunikasi langsung dengan pelanggan.</p>
 
       <div class="hero-cta hero-fade" id="fadeCta">
         <a href="#projects" class="btn btn-primary">Lihat Proyek ↓</a>
@@ -539,7 +605,7 @@
         <div class="stat-connector"></div>
         <div class="stat"><span class="num amber">70%</span><span class="label">DETEKSI RISIKO AI</span></div>
         <div class="stat-connector"></div>
-        <div class="stat"><span class="num teal">01</span><span class="label">MAGANG BACKEND</span></div>
+        <div class="stat"><span class="num teal">01</span><span class="label">MAGANG DEVELOPER</span></div>
       </div>
     </div>
 
@@ -555,17 +621,70 @@
     </div>
   </section>
 
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-head">
+      <span class="step mono">edu</span>
+      <div><h2>Pendidikan</h2><p class="section-sub">Latar belakang akademik dan fokus riset tugas akhir.</p></div>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-head">
+        <span class="edu-school">Universitas Dian Nuswantoro, Semarang</span>
+        <span class="edu-date mono">2022 – 2026</span>
+      </div>
+      <div class="edu-major">S1 Teknik Informatika · Peminatan Rekayasa Perangkat Lunak · IPK 3.37/4.00</div>
+      <p class="edu-desc">Tugas Akhir: <em>Pengembangan Sistem Konsultasi Informasi Kesehatan Berbasis AI dengan Integrasi n8n dan Model LLM.</em></p>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-head">
+        <span class="edu-school">SMA Negeri 1 Batang</span>
+        <span class="edu-date mono">2019 – 2022</span>
+      </div>
+      <div class="edu-major">Ilmu Pengetahuan Alam · Nilai rata-rata 87,38</div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="divider-flow"><div class="seg"></div><div class="node"></div><div class="seg"></div></div></div>
+
   <!-- PROJECTS -->
   <section id="projects">
     <div class="section-head">
       <span class="step mono">run</span>
-      <div><h2>Proyek Unggulan</h2><p class="section-sub">Dua sistem yang saya bangun dari nol — satu berbasis riset AI, satu berbasis kebutuhan produksi.</p></div>
+      <div><h2>Proyek Unggulan</h2><p class="section-sub">Dua proyek: satu untuk tugas akhir, satu dari kerja praktek di perusahaan.</p></div>
     </div>
 
     <div class="projects">
       <div class="pr-card">
         <div class="pr-tagline"><span class="lit"></span> Skripsi · 2026</div>
         <h3>Asisten Konsultasi Kesehatan Berbasis AI</h3>
+
+        <div class="gallery" data-gallery>
+          <div class="g-viewport">
+            <div class="g-track">
+              <figure class="g-slide" data-caption="Tampilan aplikasi konsultasi AI">
+                <img src="img/ai-app.jpeg" alt="Tampilan aplikasi konsultasi AI" loading="lazy" onerror="this.closest('.g-slide').classList.add('missing')">
+                <div class="g-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Tampilan aplikasi konsultasi AI<br>img/ai-app.png</span></div>
+                <figcaption class="g-cap">Tampilan aplikasi konsultasi AI</figcaption>
+              </figure>
+              <figure class="g-slide" data-caption="Workflow n8n">
+                <img src="img/ai-n8n-workflow.png" alt="Workflow n8n" loading="lazy" onerror="this.closest('.g-slide').classList.add('missing')">
+                <div class="g-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Workflow n8n<br>img/ai-n8n-workflow.png</span></div>
+                <figcaption class="g-cap">Workflow n8n</figcaption>
+              </figure>
+              <figure class="g-slide" data-caption="Contoh hasil pengujian sistem">
+                <img src="img/ai-pengujian.png" alt="Contoh hasil pengujian sistem" loading="lazy" onerror="this.closest('.g-slide').classList.add('missing')">
+                <div class="g-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Contoh hasil pengujian sistem<br>img/ai-pengujian.png</span></div>
+                <figcaption class="g-cap">Contoh hasil pengujian sistem</figcaption>
+              </figure>
+            </div>
+            <button class="g-btn prev" type="button" aria-label="Foto sebelumnya">‹</button>
+            <button class="g-btn next" type="button" aria-label="Foto berikutnya">›</button>
+          </div>
+          <div class="g-bar"><div class="g-dots"></div><span>Klik foto untuk memperbesar</span></div>
+        </div>
+
         <p class="pr-desc">Sistem konsultasi kesehatan berbasis LLM (GPT-4o via OpenAI API) yang diorkestrasi lewat workflow automation n8n. Sistem otomatis mendeteksi jawaban AI yang berisiko secara medis, lalu menulis ulang responsnya agar tetap aman dan edukatif — tanpa menggantikan peran tenaga medis.</p>
         <div class="stack-chips">
           <span class="chip">n8n</span>
@@ -586,16 +705,44 @@
       <div class="pr-card">
         <div class="pr-tagline"><span class="lit"></span> Kerja Praktek · Jan 2025</div>
         <h3>Digital Signage — PT. TJB Power Services</h3>
-        <p class="pr-desc">Sistem digital signage berbasis web menggantikan papan pengumuman cetak. Sebagai Backend Developer, saya membangun struktur database, panel admin, penjadwalan tayang otomatis dengan validasi bentrok jadwal, dan autentikasi login — sekaligus membantu frontend.</p>
+
+        <div class="gallery" data-gallery>
+          <div class="g-viewport">
+            <div class="g-track">
+              <figure class="g-slide" data-caption="Halaman dashboard admin">
+                <img src="img/signage-dashboard.jpeg" alt="Halaman dashboard admin Digital Signage" loading="lazy" onerror="this.closest('.g-slide').classList.add('missing')">
+                <div class="g-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Halaman dashboard admin<br>img/signage-dashboard.png</span></div>
+                <figcaption class="g-cap">Halaman dashboard admin</figcaption>
+              </figure>
+              <figure class="g-slide" data-caption="Tampilan digital signage — landscape">
+                <img src="img/signage-landscape.jpeg" alt="Tampilan digital signage mode landscape" loading="lazy" onerror="this.closest('.g-slide').classList.add('missing')">
+                <div class="g-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Tampilan digital signage — landscape<br>img/signage-landscape.png</span></div>
+                <figcaption class="g-cap">Tampilan digital signage — landscape</figcaption>
+              </figure>
+              <figure class="g-slide" data-caption="Tampilan digital signage — portrait">
+                <img src="img/signage-portrait.jpeg" alt="Tampilan digital signage mode portrait" loading="lazy" onerror="this.closest('.g-slide').classList.add('missing')">
+                <div class="g-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Tampilan digital signage — portrait<br>img/signage-portrait.png</span></div>
+                <figcaption class="g-cap">Tampilan digital signage — portrait</figcaption>
+              </figure>
+            </div>
+            <button class="g-btn prev" type="button" aria-label="Foto sebelumnya">‹</button>
+            <button class="g-btn next" type="button" aria-label="Foto berikutnya">›</button>
+          </div>
+          <div class="g-bar"><div class="g-dots"></div><span>Klik foto untuk memperbesar</span></div>
+        </div>
+
+        <p class="pr-desc">Sistem digital signage berbasis web untuk menggantikan papan pengumuman cetak. Saya mengerjakan antarmuka yang responsif untuk mode landscape dan portrait (Bootstrap/TailwindCSS), serta sisi backend: struktur database, panel admin, penjadwalan tayang dengan validasi bentrok jadwal, dan autentikasi login.</p>
         <div class="stack-chips">
+          <span class="chip">HTML / CSS / JS</span>
+          <span class="chip">Bootstrap 5</span>
+          <span class="chip">Responsive UI</span>
           <span class="chip">PHP Native</span>
           <span class="chip">MySQL / PDO</span>
           <span class="chip">AJAX</span>
-          <span class="chip">Bootstrap 5</span>
         </div>
         <div class="check-grid">
+          <div class="check-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> UI Responsif (Landscape &amp; Portrait)</div>
           <div class="check-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> CMS Admin</div>
-          <div class="check-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> CRUD Konten</div>
           <div class="check-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Penjadwalan Otomatis</div>
           <div class="check-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Autentikasi Login</div>
         </div>
@@ -617,26 +764,36 @@
     </div>
 
     <div class="exp-card">
+      <div class="exp-top">
+        <div class="exp-logo"><img src="img/logo-tjb.jpg" alt="Logo PT. TJB Power Services" loading="lazy" onerror="this.closest('.exp-logo').remove()"></div>
+        <div class="exp-top-body">
       <div class="exp-head">
-        <span class="role">Backend Developer</span>
+        <span class="role">Backend &amp; Frontend Developer</span>
         <span class="date mono">20 Jan 2025 – 20 Feb 2025</span>
       </div>
       <div class="exp-company">PT. TJB Power Services · Divisi Development</div>
-      <p class="exp-desc">Terlibat dalam pengembangan sistem Digital Signage sebagai media informasi internal perusahaan. Bertanggung jawab atas struktur database, sistem manajemen konten berbasis PHP, fitur CRUD, penjadwalan tayang otomatis, dan autentikasi admin — sekaligus membantu pengembangan antarmuka frontend.</p>
+        </div>
+      </div>
+      <p class="exp-desc">Terlibat dalam pengembangan sistem Digital Signage sebagai media informasi internal perusahaan. Mengerjakan antarmuka responsif (Bootstrap/TailwindCSS) untuk tampilan landscape dan portrait, serta struktur database, fitur CRUD, penjadwalan tayang otomatis, dan autentikasi admin. Melakukan pengujian dan debugging berdasarkan masukan pembimbing lapangan.</p>
       <div class="exp-tags">
+        <span class="chip">Responsive UI</span>
+        <span class="chip">Bootstrap / Tailwind</span>
         <span class="chip">Database Design</span>
-        <span class="chip">CMS</span>
-        <span class="chip">Scheduling Logic</span>
-        <span class="chip">Auth</span>
+        <span class="chip">Testing &amp; Debugging</span>
       </div>
     </div>
 
     <div class="exp-card">
+      <div class="exp-top">
+        <div class="exp-logo"><img src="img/logo-ratu-cleaning.png" alt="Logo Ratu Cleaning" loading="lazy" onerror="this.closest('.exp-logo').remove()"></div>
+        <div class="exp-top-body">
       <div class="exp-head">
         <span class="role">Admin &amp; Customer Service (Freelance)</span>
         <span class="date mono">Agu 2025 – Des 2025</span>
       </div>
       <div class="exp-company">Ratu Cleaning · Jasa Cuci Sofa &amp; Kasur</div>
+        </div>
+      </div>
       <p class="exp-desc">Mengelola komunikasi pelanggan melalui WhatsApp Business, menjawab pertanyaan seputar layanan, mencatat dan mengatur jadwal pemesanan, serta melakukan follow-up untuk memastikan kelancaran operasional dan kepuasan pelanggan.</p>
       <div class="exp-tags">
         <span class="chip">Customer Service</span>
@@ -662,18 +819,18 @@
           <span class="chip">HTML</span>
           <span class="chip">CSS</span>
           <span class="chip">JavaScript</span>
+          <span class="chip">Figma</span>
+          <span class="chip">Microsoft Office</span>
+          <span class="chip">Google Workspace</span>
+          <span class="chip">Canva</span>
           <span class="chip">PHP</span>
           <span class="chip">MySQL</span>
+          <span class="chip">Postman</span>
           <span class="chip">n8n</span>
           <span class="chip">OpenAI API</span>
-          <span class="chip">Postman</span>
           <span class="chip">Workflow Automation</span>
           <span class="chip">VS Code</span>
           <span class="chip">XAMPP</span>
-          <span class="chip">Figma</span>
-          <span class="chip">Canva</span>
-          <span class="chip">Google Workspace</span>
-          <span class="chip">Microsoft Office</span>
         </div>
       </div>
 
@@ -703,32 +860,6 @@
     </div>
   </section>
 
-  <div class="wrap"><div class="divider-flow"><div class="seg"></div><div class="node"></div><div class="seg"></div></div></div>
-
-  <!-- EDUCATION -->
-  <section id="education">
-    <div class="section-head">
-      <span class="step mono">edu</span>
-      <div><h2>Pendidikan</h2><p class="section-sub">Latar belakang akademik dan fokus riset tugas akhir.</p></div>
-    </div>
-
-    <div class="edu-card">
-      <div class="edu-head">
-        <span class="edu-school">Universitas Dian Nuswantoro, Semarang</span>
-        <span class="edu-date mono">2022 – 2026</span>
-      </div>
-      <div class="edu-major">S1 Teknik Informatika · Peminatan Rekayasa Perangkat Lunak · IPK 3.37/4.00</div>
-      <p class="edu-desc">Tugas Akhir: <em>Pengembangan Sistem Konsultasi Informasi Kesehatan Berbasis AI dengan Integrasi n8n dan Model LLM.</em></p>
-    </div>
-
-    <div class="edu-card">
-      <div class="edu-head">
-        <span class="edu-school">SMA Negeri 1 Batang</span>
-        <span class="edu-date mono">2019 – 2022</span>
-      </div>
-      <div class="edu-major">Ilmu Pengetahuan Alam · Nilai rata-rata 87,38</div>
-    </div>
-  </section>
 
   <div class="wrap"><div class="divider-flow"><div class="seg"></div><div class="node"></div><div class="seg"></div></div></div>
 
@@ -740,22 +871,23 @@
     </div>
 
     <div class="certs">
+      <a class="cert-card" href="certs/sertifikat-ujikom.pdf" target="_blank" rel="noopener">
+        <div class="cert-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-5.5 3 1-6L3 8l6-1L12 2l3 5 6 1-4.5 4 1 6z"/></svg></div>
+        <div class="cert-body">
+          <h3>Sertifikat Kompetensi BNSP</h3>
+          <div class="cert-issuer">LSP Universitas Dian Nuswantoro</div>
+          <div class="cert-issuer">Pengumpulan, validasi, dan konstruksi data; membangun serta mengevaluasi model data.</div>
+          <span class="cert-date mono">Associate Data Scientist · Apr 2026</span>
+          <span class="cert-link">Lihat sertifikat ↗</span>
+        </div>
+      </a>
+
       <a class="cert-card" href="certs/sertifikat-toefl.pdf" target="_blank" rel="noopener">
         <div class="cert-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div>
         <div class="cert-body">
           <h3>English Proficiency Assessment</h3>
           <div class="cert-issuer">CFLT, Universitas Dian Nuswantoro</div>
           <span class="cert-date mono">Skor 463 · Jan 2026</span>
-          <span class="cert-link">Lihat sertifikat ↗</span>
-        </div>
-      </a>
-
-      <a class="cert-card" href="certs/sertifikat-ujikom.pdf" target="_blank" rel="noopener">
-        <div class="cert-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-5.5 3 1-6L3 8l6-1L12 2l3 5 6 1-4.5 4 1 6z"/></svg></div>
-        <div class="cert-body">
-          <h3>Sertifikat Kompetensi BNSP</h3>
-          <div class="cert-issuer">LSP Universitas Dian Nuswantoro</div>
-          <span class="cert-date mono">Associate Data Scientist · Apr 2026</span>
           <span class="cert-link">Lihat sertifikat ↗</span>
         </div>
       </a>
@@ -787,7 +919,7 @@
     <div class="contact-card">
       <div>
         <h2>Mari terhubung.</h2>
-        <p class="lead-c">Terbuka untuk diskusi peluang kerja, kolaborasi proyek, atau ngobrol soal AI &amp; automation.</p>
+        <p class="lead-c">Terbuka untuk peluang sebagai Frontend Developer atau Marketing Analyst, serta diskusi dan kolaborasi proyek.</p>
         <div class="contact-cta"><a href="CV-DINARTITIAN.pdf" class="btn btn-primary" download>Unduh CV ↗</a></div>
       </div>
       <div class="contact-grid">
@@ -818,6 +950,17 @@
 </main>
 
 <footer>© <span id="year"></span> dinartj</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau foto" aria-hidden="true">
+  <button class="lb-close" id="lbClose" type="button" aria-label="Tutup">✕</button>
+  <button class="lb-nav prev" id="lbPrev" type="button" aria-label="Foto sebelumnya">‹</button>
+  <figure>
+    <img id="lbImg" src="" alt="">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+  <button class="lb-nav next" id="lbNext" type="button" aria-label="Foto berikutnya">›</button>
+</div>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -907,6 +1050,107 @@
   } else {
     document.querySelectorAll('.pr-card').forEach(el => el.classList.add('in'));
   }
+
+  // ---- Galleries (slider) + lightbox ----
+  (function(){
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCap = document.getElementById('lbCap');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    const lbClose = document.getElementById('lbClose');
+
+    let lbItems = [];
+    let lbIndex = 0;
+    let lastFocus = null;
+
+    function showLb(){
+      const slide = lbItems[lbIndex];
+      const img = slide.querySelector('img');
+      lbImg.src = img.currentSrc || img.src;
+      lbImg.alt = img.alt;
+      lbCap.textContent = slide.dataset.caption || '';
+      const single = lbItems.length < 2;
+      lbPrev.hidden = single;
+      lbNext.hidden = single;
+    }
+    function openLb(slides, slide){
+      lbItems = slides.filter(s => !s.classList.contains('missing'));
+      lbIndex = Math.max(0, lbItems.indexOf(slide));
+      lastFocus = document.activeElement;
+      showLb();
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      lbClose.focus();
+    }
+    function closeLb(){
+      lb.classList.remove('open');
+      lb.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+      if(lastFocus) lastFocus.focus();
+    }
+    function stepLb(d){
+      if(lbItems.length < 2) return;
+      lbIndex = (lbIndex + d + lbItems.length) % lbItems.length;
+      showLb();
+    }
+    lbClose.addEventListener('click', closeLb);
+    lbPrev.addEventListener('click', () => stepLb(-1));
+    lbNext.addEventListener('click', () => stepLb(1));
+    lb.addEventListener('click', (e) => { if(e.target === lb) closeLb(); });
+    document.addEventListener('keydown', (e) => {
+      if(!lb.classList.contains('open')) return;
+      if(e.key === 'Escape') closeLb();
+      else if(e.key === 'ArrowLeft') stepLb(-1);
+      else if(e.key === 'ArrowRight') stepLb(1);
+    });
+
+    document.querySelectorAll('[data-gallery]').forEach(gallery => {
+      const track = gallery.querySelector('.g-track');
+      const slides = Array.from(gallery.querySelectorAll('.g-slide'));
+      const prev = gallery.querySelector('.g-btn.prev');
+      const next = gallery.querySelector('.g-btn.next');
+      const dotsWrap = gallery.querySelector('.g-dots');
+
+      const dots = slides.map((s, i) => {
+        const d = document.createElement('button');
+        d.type = 'button';
+        d.className = 'g-dot';
+        d.setAttribute('aria-label', 'Ke foto ' + (i + 1));
+        d.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(d);
+        return d;
+      });
+
+      function current(){ return Math.round(track.scrollLeft / track.clientWidth); }
+      function goTo(i){
+        const n = Math.min(Math.max(i, 0), slides.length - 1);
+        track.scrollTo({ left: n * track.clientWidth });
+      }
+      function update(){
+        const c = Math.min(Math.max(current(), 0), slides.length - 1);
+        dots.forEach((d, i) => d.classList.toggle('active', i === c));
+        prev.disabled = c === 0;
+        next.disabled = c === slides.length - 1;
+      }
+
+      prev.addEventListener('click', () => goTo(current() - 1));
+      next.addEventListener('click', () => goTo(current() + 1));
+      track.addEventListener('scroll', () => window.requestAnimationFrame(update), { passive: true });
+      window.addEventListener('resize', update);
+
+      slides.forEach(slide => {
+        slide.addEventListener('click', () => {
+          if(slide.classList.contains('missing')) return;
+          openLb(slides, slide);
+        });
+      });
+
+      update();
+    });
+  })();
 </script>
 
 </body>
